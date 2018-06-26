@@ -53,10 +53,19 @@
     - name: install libmysqlclient-dev
       become: yes
       apt:
-        name: libmysqlclient-dev
+        name: "{{ item }}"
         state: latest
+      with_items:
+        - libmysqlclient-dev
+        - mysql-client-core-5.6
     - name: install docker
       shell: | 
         curl -fsSL get.docker.com -o get-docker.sh
         sh get-docker.sh
         rm get-docker.sh
+    - name: adding user vagrant docker
+      become: yes
+      user:
+        name: vagrant
+        group: docker
+        append: yes
