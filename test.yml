@@ -51,6 +51,16 @@
         name: rails
         user_install: no
         executable: ~/.rbenv/shims/gem
+    - name: install ruby-railties
+      become: yes
+      apt:
+        name: ruby-railties
+        state: latest
+    - name: install mysql-server
+      become: yes
+      apt:
+        name: mysql-server
+        state: latest
     - name: install docker
       shell: | 
         curl -fsSL get.docker.com -o get-docker.sh
