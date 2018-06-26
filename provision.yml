@@ -25,7 +25,7 @@
       apt:
         name: ruby2.5
         state: latest
-    - name: prepare for install ruby
+    - name: prepare for install rails
       become: yes
       apt:
         name: "{{ item }}"
@@ -39,6 +39,7 @@
         - libreadline-dev
         - zlib1g-dev
         - ruby-railties
+        - nodejs
     - name: switch ruby-2.5
       shell: sudo ruby-switch --set ruby2.5
     - name: install bundler
@@ -49,10 +50,10 @@
       gem:
         name: rails
         user_install: no
-    - name: install mysql-server
+    - name: install libmysqlclient-dev
       become: yes
       apt:
-        name: mysql-server
+        name: libmysqlclient-dev
         state: latest
     - name: install docker
       shell: | 
