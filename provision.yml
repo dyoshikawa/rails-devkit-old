@@ -41,7 +41,8 @@
         - ruby-railties
         - nodejs
     - name: switch ruby-2.5
-      shell: sudo ruby-switch --set ruby2.5
+      command: sudo ruby-switch --set ruby2.5
+      changed_when: false
     - name: install bundler
       gem:
         name: bundler
@@ -58,11 +59,18 @@
       with_items:
         - libmysqlclient-dev
         - mysql-client-core-5.6
+    - name: check docker
+      command: sudo docker ps
+      register: docker_result
+      changed_when: false
+      failed_when: false
     - name: install docker
       shell: | 
         curl -fsSL get.docker.com -o get-docker.sh
         sh get-docker.sh
         rm get-docker.sh
+      when:
+        docker_result.rc != 0
     - name: adding user vagrant docker
       become: yes
       user:
