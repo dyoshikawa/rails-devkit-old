@@ -1,21 +1,36 @@
 - hosts: localhost
-  user: root
+  user: vagrant
   tasks:
     - name: apt update
-      apt: name=* state=latest
+      become: yes
+      apt:
+        name: "*"
+        state: latest
     - name: install git
-      apt: name=git state=latest
-    - git: repo=https://github.com/sstephenson/rbenv.git dest=/root/.rbenv version=master
+      become: yes
+      apt:
+        name: git
+        state: latest
+    - git:
+        repo: https://github.com/sstephenson/rbenv.git
+        dest: /home/vagrant/.rbenv
+        version: master
+    - file:
+       path: /home/vagrant/.bash_profile
+       state: touch
     - name: install rbenv
       lineinfile:
-        dest=/root/.bashrc
-        line={{ item }}
+        dest: /home/vagrant/.bash_profile
+        line: "{{ item }}"
       with_items:
         - 'export PATH="$HOME/.rbenv/bin:$PATH"'
         - 'eval "$(rbenv init -)"'
     - name: install ruby-build
-      shell: git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build
+      git:
+        repo: https://github.com/sstephenson/ruby-build.git
+        dest: /home/vagrant/.rbenv/plugins/ruby-build
     - name: install ruby v2.5.0
+      become: yes
       apt:
         name: "{{ item }}"
         state: latest
@@ -23,11 +38,19 @@
         - libssl-dev
         - libreadline-dev
         - zlib1g-dev
-    - shell: /root/.rbenv/bin/rbenv install 2.5.0
-    - shell: /root/.rbenv/bin/rbenv global 2.5.0
+    - shell: |
+        sudo ~/.rbenv/bin/rbenv install 2.5.0
+        sudo ~/.rbenv/bin/rbenv global 2.5.0
     - name: install rails
-      shell: gem install rails
+      gem:
+        name: "{{ item }}"
+        user_install: no
+        executable: /usr/local/rbenv/shims/gem
+        with_items:
+          - bundler
+          - rails
     - name: install docker
-      shell: curl -fsSL get.docker.com -o get-docker.sh
-    - shell: sh get-docker.sh
-    - shell: rm get-docker.sh
+      shell: | 
+        curl -fsSL get.docker.com -o get-docker.sh
+        sh get-docker.sh
+        rm get-docker.sh
