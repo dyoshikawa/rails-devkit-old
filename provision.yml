@@ -1,0 +1,61 @@
+- hosts: localhost
+  user: vagrant
+  tasks:
+    - name: apt update
+      become: yes
+      apt:
+        name: "*"
+        state: latest
+    - name: install git
+      become: yes
+      apt:
+        name: git
+        state: latest
+    - name: apt add repository brightbox/ruby-ng
+      become: yes
+      apt_repository:
+        repo: ppa:brightbox/ruby-ng
+    - name: apt update
+      become: yes
+      apt:
+        name: "*"
+        state: latest
+    - name: install ruby v2.5.x
+      become: yes
+      apt:
+        name: ruby2.5
+        state: latest
+    - name: prepare for install ruby
+      become: yes
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - ruby2.5-dev
+        - ruby-switch
+        - libxml2
+        - libxml2-dev
+        - libssl-dev
+        - libreadline-dev
+        - zlib1g-dev
+        - ruby-railties
+    - name: switch ruby-2.5
+      shell: sudo ruby-switch --set ruby2.5
+    - name: install bundler
+      gem:
+        name: bundler
+        user_install: no
+    - name: install rails
+      gem:
+        name: rails
+        user_install: no
+    - name: install mysql-server
+      become: yes
+      apt:
+        name: mysql-server
+        state: latest
+    - name: install docker
+      shell: | 
+        curl -fsSL get.docker.com -o get-docker.sh
+        sh get-docker.sh
+        rm get-docker.sh

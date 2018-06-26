@@ -67,6 +67,6 @@ Vagrant.configure("2") do |config|
     apt-add-repository ppa:ansible/ansible
     apt update -y
     apt install -y ansible
-    ansible-playbook /home/vagrant/code/test.yml
+    ansible-playbook /home/vagrant/code/provision.yml
   SHELL
 end
