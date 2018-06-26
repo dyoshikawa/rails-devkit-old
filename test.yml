@@ -41,14 +41,16 @@
     - shell: |
         sudo ~/.rbenv/bin/rbenv install 2.5.0
         sudo ~/.rbenv/bin/rbenv global 2.5.0
+    - name: install bundler
+      gem:
+        name: bundler
+        user_install: no
+        executable: ~/.rbenv/shims/gem
     - name: install rails
       gem:
-        name: "{{ item }}"
+        name: rails
         user_install: no
-        executable: /usr/local/rbenv/shims/gem
-        with_items:
-          - bundler
-          - rails
+        executable: ~/.rbenv/shims/gem
     - name: install docker
       shell: | 
         curl -fsSL get.docker.com -o get-docker.sh
