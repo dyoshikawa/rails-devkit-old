@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = 'rails-devkit'
 
   config.vm.network "forwarded_port", guest: 3000, host: 30000, host_ip: "127.0.0.1"
-  config.vm.network "forwarded_port", guest: 3306, host: 33060, host_ip: "127.0.0.1"
+ # config.vm.network "forwarded_port", guest: 3306, host: 33060, host_ip: "127.0.0.1"
 
   config.vm.synced_folder ".", "/home/vagrant/code"
 

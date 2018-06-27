@@ -44,6 +44,10 @@
         - zlib1g-dev
         - ruby-railties
         - nodejs
+        - gcc
+        - make
+        - zlib1g-dev
+        - sqlite3
     - name: switch ruby-2.5
       command: sudo ruby-switch --set ruby2.5
       changed_when: false
