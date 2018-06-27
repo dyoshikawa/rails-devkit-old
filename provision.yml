@@ -1,6 +1,10 @@
 - hosts: localhost
   user: vagrant
   tasks:
+    - name: install aptitude
+      apt:
+        name: aptitude
+        state: latest
     - name: apt update
       become: yes
       apt:
